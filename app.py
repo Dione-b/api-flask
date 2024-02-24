@@ -7,6 +7,10 @@ import os
 app = Flask(__name__)
 CORS(app)
 
+@app.route('/')
+def hello_world():
+    return 'Hello, World!'
+
 @app.route('/get_image', methods=['GET'])
 def get_image():
     filename = request.args.get('filename')
@@ -46,6 +50,4 @@ def upload_image():
     return jsonify({'message': 'Image uploaded successfully', 'filename': filename}),  200
 
 if __name__ == '__main__':
-    if not os.path.exists('uploads'):
-        os.makedirs('uploads')
     app.run(host='0.0.0.0', port=5000, debug=True)
