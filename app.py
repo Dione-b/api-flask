@@ -1,10 +1,23 @@
 from flask import Flask, request, jsonify
+from flask import send_file
 from flask_cors import CORS
 import base64
 import os
 
 app = Flask(__name__)
 CORS(app)
+
+@app.route('/get_image', methods=['GET'])
+def get_image():
+    filename = request.args.get('filename')
+    if not filename:
+        return jsonify({'error': 'Filename not provided'}), 400
+
+    filepath = os.path.join('uploads', filename)
+    if not os.path.exists(filepath):
+        return jsonify({'error': 'Image not found'}), 404
+
+    return send_file(filepath, mimetype='image/jpeg')
 
 @app.route('/upload', methods=['POST'])
 def upload_image():
